@@ -1,4 +1,4 @@
-// QuickNotes API Client - Task 1: Load Notes (GET)
+// QuickNotes API Client - Tasks 1 & 2: Load Notes (GET) and Create Notes (POST)
 
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
@@ -100,5 +100,67 @@ async function loadNotes() {
   }
 }
 
+// Task 2: Create a new note via POST request
+async function createNote(event) {
+  event.preventDefault();
+
+  const title = titleInput.value.trim();
+  const body = bodyInput.value.trim();
+
+  // Client-side validation: title required, max 100 characters
+  if (!title) {
+    setStatus("Validation Error: Title is required.", "error");
+    titleInput.focus();
+    return;
+  }
+
+  if (title.length > 100) {
+    setStatus("Validation Error: Title must be 100 characters or fewer.", "error");
+    titleInput.focus();
+    return;
+  }
+
+  // Disable button and show loading state
+  submitBtn.disabled = true;
+  setStatus("Creating note on server...", "loading");
+
+  try {
+    const response = await request(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        userId: 1,
+      }),
+    });
+
+    const newNote = await response.json();
+
+    // Remove empty state message if it is currently displayed
+    const emptyState = notesList.querySelector(".empty-state");
+    if (emptyState) {
+      emptyState.remove();
+    }
+
+    // Add newly created note to the top of the list
+    const newNoteEl = createNoteElement(newNote);
+    notesList.prepend(newNoteEl);
+
+    // Show success status including HTTP status code and new id
+    setStatus(`Note created (status ${response.status}, id ${newNote.id}).`, "success");
+
+    // Clear form inputs
+    noteForm.reset();
+  } catch (error) {
+    setStatus(`Failed to create note: ${error.message}.`, "error");
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
+
 // Event Listeners
 loadBtn.addEventListener("click", loadNotes);
+noteForm.addEventListener("submit", createNote);
