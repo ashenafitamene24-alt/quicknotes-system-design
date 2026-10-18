@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuickNotes - API Client & System Design</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="api.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <h1>QuickNotes Cloud Client</h1>
+        <p class="subtitle">REST API Client for QuickNotes Cloud Service</p>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <section class="controls-card">
+        <div class="actions-header">
+          <h2>Actions</h2>
+          <button id="load-btn" type="button">Load notes</button>
+        </div>
+
+        <p id="status" class="status-msg" role="status" aria-live="polite"></p>
+
+        <form id="note-form" novalidate>
+          <h3>Create New Note</h3>
+
+          <div class="form-group">
+            <label for="title-input">Title (required, max 100 chars):</label>
+            <input
+              type="text"
+              id="title-input"
+              name="title"
+              maxlength="100"
+              placeholder="e.g. Architecture meeting notes"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="body-input">Note Body (optional):</label>
+            <textarea
+              id="body-input"
+              name="body"
+              rows="4"
+              placeholder="Write your note contents here..."
+            ></textarea>
+          </div>
+
+          <button id="submit-btn" type="submit">Create Note</button>
+        </form>
+      </section>
+
+      <section class="notes-section">
+        <h2>Your Notes</h2>
+        <ul id="notes-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 QuickNotes Cloud &bull; Project 2 Capstone</p>
+    </footer>
+  </body>
+</html>
